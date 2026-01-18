@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-journal
+*.log
+.DS_Store
+*.mp3
+*.ogg
+*.wav
+temp/

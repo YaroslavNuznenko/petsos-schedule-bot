@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Vet {
+  id             Int      @id @default(autoincrement())
+  telegramUserId BigInt   @unique
+  name           String?
+  phone          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  slots AvailabilitySlot[]
+}
+
+model AvailabilitySlot {
+  id        Int      @id @default(autoincrement())
+  vetId     Int
+  vet       Vet      @relation(fields: [vetId], references: [id], onDelete: Cascade)
+
+  date      String
+  startTime String
+  endTime   String
+  type      String   // "URGENT" | "VP"
+  source    String   // "voice" | "text"
+  createdAt DateTime @default(now())
+
+  @@unique([vetId, date, startTime, type])
+  @@index([vetId, date])
+}
