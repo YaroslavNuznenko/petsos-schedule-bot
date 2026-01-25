@@ -83,7 +83,7 @@ export async function handleCallback(ctx: Context) {
       }
 
       try {
-        const vet = await getOrCreateVet(String(user.id));
+        const vet = await getOrCreateVet("telegram", String(user.id));
         const result = await deleteVetSlotsForMonth(vet.id, yearMonth);
         pendingClearConfirmations.delete(user.id);
 

@@ -9,7 +9,7 @@ export async function handleAddSlots(ctx: Context) {
 
   try {
     const vet = await getOrCreateVetFromContext(ctx);
-    const hasPhone = await vetHasPhone(BigInt(user.id));
+    const hasPhone = await vetHasPhone("telegram", BigInt(user.id));
     
     if (!hasPhone) {
       await ctx.reply(
@@ -45,7 +45,7 @@ export async function handleContact(ctx: Context) {
 
   try {
     const phone = message.contact.phone_number;
-    await updateVetPhone(BigInt(user.id), phone);
+    await updateVetPhone("telegram", BigInt(user.id), phone);
     
     await ctx.reply(
       `✅ Номер телефону збережено: ${phone}\n\n` +

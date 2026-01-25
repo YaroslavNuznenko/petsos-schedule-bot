@@ -11,7 +11,7 @@ export async function handleAdminSchedule(ctx: Context) {
   const user = ctx.from;
   if (!user) return;
 
-  const isAdmin = await isVetAdmin(BigInt(user.id));
+  const isAdmin = await isVetAdmin("telegram", BigInt(user.id));
   if (!isAdmin) {
     await ctx.reply("❌ У вас немає прав адміністратора.");
     return;

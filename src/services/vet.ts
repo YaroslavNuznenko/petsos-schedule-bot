@@ -3,13 +3,13 @@ import { Context } from "telegraf";
 
 const prisma = new PrismaClient();
 
-export async function getOrCreateVetFromContext(ctx: Context) {
+export async function getOrCreateVetFromContext(ctx: Context, platform: string = "telegram") {
   const user = ctx.from;
   if (!user) {
     throw new Error("User context is missing");
   }
 
-  const telegramUserId = BigInt(user.id);
+  const platformUserId = BigInt(user.id);
   
   let name: string | null = null;
   if (user.first_name) {
@@ -21,13 +21,19 @@ export async function getOrCreateVetFromContext(ctx: Context) {
   }
 
   let vet = await prisma.vet.findUnique({
-    where: { telegramUserId },
+    where: { 
+      platform_platformUserId: {
+        platform,
+        platformUserId,
+      }
+    },
   });
 
   if (!vet) {
     vet = await prisma.vet.create({
       data: {
-        telegramUserId,
+        platform,
+        platformUserId,
         name,
         phone: null,
       },
@@ -44,34 +50,53 @@ export async function getOrCreateVetFromContext(ctx: Context) {
   return vet;
 }
 
-export async function updateVetPhone(telegramUserId: bigint, phone: string) {
+export async function updateVetPhone(platform: string, platformUserId: bigint, phone: string) {
   return prisma.vet.update({
-    where: { telegramUserId },
+    where: {
+      platform_platformUserId: {
+        platform,
+        platformUserId,
+      }
+    },
     data: { phone },
   });
 }
 
-export async function vetHasPhone(telegramUserId: bigint): Promise<boolean> {
+export async function vetHasPhone(platform: string, platformUserId: bigint): Promise<boolean> {
   const vet = await prisma.vet.findUnique({
-    where: { telegramUserId },
+    where: {
+      platform_platformUserId: {
+        platform,
+        platformUserId,
+      }
+    },
     select: { phone: true },
   });
   
   return vet ? vet.phone !== null : false;
 }
 
-export async function isVetAdmin(telegramUserId: bigint): Promise<boolean> {
+export async function isVetAdmin(platform: string, platformUserId: bigint): Promise<boolean> {
   const vet = await prisma.vet.findUnique({
-    where: { telegramUserId },
+    where: {
+      platform_platformUserId: {
+        platform,
+        platformUserId,
+      }
+    },
     select: { isAdmin: true },
   });
-  
-  return vet ? vet.isAdmin : false;
+  return vet?.isAdmin || false;
 }
 
-export async function setVetAdmin(telegramUserId: bigint, isAdmin: boolean) {
+export async function setVetAdmin(platform: string, platformUserId: bigint, isAdmin: boolean) {
   return prisma.vet.update({
-    where: { telegramUserId },
+    where: {
+      platform_platformUserId: {
+        platform,
+        platformUserId,
+      }
+    },
     data: { isAdmin },
   });
 }

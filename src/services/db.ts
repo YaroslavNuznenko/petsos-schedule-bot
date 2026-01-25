@@ -3,17 +3,23 @@ import { Slot } from "../domain/schema";
 
 const prisma = new PrismaClient();
 
-export async function getOrCreateVet(telegramUserId: string | bigint, name?: string) {
-  const userId = typeof telegramUserId === "string" ? BigInt(telegramUserId) : telegramUserId;
+export async function getOrCreateVet(platform: string, platformUserId: string | bigint, name?: string) {
+  const userId = typeof platformUserId === "string" ? BigInt(platformUserId) : platformUserId;
   
   let vet = await prisma.vet.findUnique({
-    where: { telegramUserId: userId },
+    where: {
+      platform_platformUserId: {
+        platform,
+        platformUserId: userId,
+      }
+    },
   });
 
   if (!vet) {
     vet = await prisma.vet.create({
       data: {
-        telegramUserId: userId,
+        platform,
+        platformUserId: userId,
         name: name || null,
       },
     });

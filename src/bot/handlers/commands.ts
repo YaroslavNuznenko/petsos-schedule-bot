@@ -14,9 +14,9 @@ export async function handleStart(ctx: Context) {
   const user = ctx.from;
   if (!user) return;
 
-  await getOrCreateVet(String(user.id), `${user.first_name} ${user.last_name || ""}`.trim());
+  await getOrCreateVet("telegram", String(user.id), `${user.first_name} ${user.last_name || ""}`.trim());
 
-  const isAdmin = await isVetAdmin(BigInt(user.id));
+  const isAdmin = await isVetAdmin("telegram", BigInt(user.id));
   
   let commandsText = `Команди:\n` +
     `/start - Інструкції з використання\n` +
@@ -48,7 +48,7 @@ export async function handleMySlots(ctx: Context) {
   const args = message.text?.split(" ").slice(1);
   const yearMonth = parseYearMonth(args?.[0]);
 
-  const vet = await getOrCreateVet(String(user.id));
+  const vet = await getOrCreateVet("telegram", String(user.id));
   const slots = await getVetSlotsForMonth(vet.id, yearMonth);
 
   if (slots.length === 0) {
@@ -77,7 +77,7 @@ export async function handleClearMonth(ctx: Context) {
   const args = message.text?.split(" ").slice(1);
   const yearMonth = parseYearMonth(args?.[0]);
 
-  const vet = await getOrCreateVet(String(user.id));
+  const vet = await getOrCreateVet("telegram", String(user.id));
   const slots = await getVetSlotsForMonth(vet.id, yearMonth);
 
   if (slots.length === 0) {
@@ -105,7 +105,7 @@ export async function handleExportMonth(ctx: Context) {
   const args = message.text?.split(" ").slice(1);
   const yearMonth = parseYearMonth(args?.[0]);
 
-  const vet = await getOrCreateVet(String(user.id));
+  const vet = await getOrCreateVet("telegram", String(user.id));
   const slots = await getVetSlotsForMonth(vet.id, yearMonth);
 
   if (slots.length === 0) {
