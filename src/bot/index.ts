@@ -6,6 +6,7 @@ import {
   handleMySlots,
   handleClearMonth,
   handleExportMonth,
+  handleAdminSchedule,
   handleVoice,
   handleText,
   handleContact,
@@ -27,6 +28,7 @@ bot.command("add_slots", handleAddSlots);
 bot.command("my_slots", handleMySlots);
 bot.command("clear_month", handleClearMonth);
 bot.command("export_month", handleExportMonth);
+bot.command("admin_schedule", handleAdminSchedule);
 
 bot.on("voice", handleVoice);
 bot.on("text", handleText);

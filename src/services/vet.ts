@@ -60,4 +60,20 @@ export async function vetHasPhone(telegramUserId: bigint): Promise<boolean> {
   return vet ? vet.phone !== null : false;
 }
 
+export async function isVetAdmin(telegramUserId: bigint): Promise<boolean> {
+  const vet = await prisma.vet.findUnique({
+    where: { telegramUserId },
+    select: { isAdmin: true },
+  });
+  
+  return vet ? vet.isAdmin : false;
+}
+
+export async function setVetAdmin(telegramUserId: bigint, isAdmin: boolean) {
+  return prisma.vet.update({
+    where: { telegramUserId },
+    data: { isAdmin },
+  });
+}
+
 export { prisma };

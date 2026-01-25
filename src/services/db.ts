@@ -167,6 +167,27 @@ export async function deleteVetSlotsForMonth(vetId: number, yearMonth: string) {
   });
 }
 
+export async function getAllSlotsForMonthByType(yearMonth: string, type: "URGENT" | "VP") {
+  const [year, month] = yearMonth.split("-").map(Number);
+  const startDateStr = `${year}-${String(month).padStart(2, "0")}-01`;
+  const lastDay = new Date(year, month, 0).getDate();
+  const endDateStr = `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+
+  return prisma.availabilitySlot.findMany({
+    where: {
+      date: {
+        gte: startDateStr,
+        lte: endDateStr,
+      },
+      type,
+    },
+    include: {
+      vet: true,
+    },
+    orderBy: [{ date: "asc" }, { startTime: "asc" }],
+  });
+}
+
 function formatDate(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

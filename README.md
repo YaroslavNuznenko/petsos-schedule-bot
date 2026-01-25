@@ -5,6 +5,7 @@ Telegram бот для PetSOS, який дозволяє ветеринарам 
 ## Вимоги
 
 - Node.js 20+
+- SQLite
 - ffmpeg
 - Telegram Bot Token
 - OpenAI API Key
@@ -16,6 +17,7 @@ npm install
 ```
 
 Встановіть ffmpeg:
+
 - macOS: `brew install ffmpeg`
 - Linux: `sudo apt-get install ffmpeg`
 - Windows: завантажте з [ffmpeg.org](https://ffmpeg.org/download.html)

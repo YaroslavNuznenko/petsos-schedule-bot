@@ -15,6 +15,7 @@ model Vet {
   telegramUserId BigInt   @unique
   name           String?
   phone          String?
+  isAdmin        Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
